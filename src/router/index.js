@@ -1,25 +1,38 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+
+import TopCategory from '@/views/category'
+import SubCategory from '@/views/category/sub.vue'
+const Goods = () => import('@/views/goods/index')
+const Login = () => import('@/views/login/index')
+const Layout = () => import('@/views/Layout.vue')
+const Home = () => import('@/views/home')
+
+const LoginCallback = () => import('@/views/login/callback')
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    component: Layout,
+    children: [
+      {
+        path: '/',
+        component: Home
+      },
+      { path: '/category/:id', component: TopCategory },
+      { path: '/category/sub/:id', component: SubCategory },
+      { path: '/product/:id', component: Goods }
+    ]
   },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
+  { path: '/login', component: Login },
+  { path: '/login/callback', component: LoginCallback }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes
+  routes,
+  scrollBehavior () {
+    return { left: 0, top: 0 }
+  }
 })
 
 export default router
