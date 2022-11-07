@@ -1,10 +1,15 @@
 <template>
   <LoginHeader>联合登录</LoginHeader>
-  <section class="container">
+   <section class="container" v-if="isBind">
+   <div class="unbind">
+     <div class="loading"></div>
+   </div>
+   </section>
+  <section class="container" v-else>
     <nav class="tab">
       <a @click="hasAccount=true" :class="{active:hasAccount}" href="javascript:;">
         <i class="iconfont icon-bind" />
- <span>已有小兔鲜账号，请绑定手机</span>
+        <span>已有小兔鲜账号，请绑定手机</span>
       </a>
       <a @click="hasAccount=false" :class="{active:!hasAccount}" href="javascript:;">
         <i class="iconfont icon-edit" />
@@ -12,7 +17,7 @@
       </a>
     </nav>
     <div class="tab-content" v-if="hasAccount">
-      <CallbackBind :nickname="nickname" :avatar="avatar" />
+      <CallbackBind :nickname="nickname" :avatar="avatar" :unionId="unionId" />
     </div>
     <div class="tab-content" v-else>
       <CallbackPatch />
@@ -22,11 +27,16 @@
 </template>
 
 <script>
+import QC from 'qc'
+import { userQQLogin } from '@/api/user'
+import Message from '@/components/library/Message'
 import { ref } from 'vue'
 import LoginHeader from './components/login-header'
 import LoginFooter from './components/login-footer'
 import CallbackBind from './components/callback-bind'
 import CallbackPatch from './components/callback-patch'
+import { useStore } from 'vuex'
+import { useRouter, useRoute } from 'vue-router'
 export default {
   name: 'PageCallback',
   components: { LoginHeader, LoginFooter, CallbackBind, CallbackPatch },
@@ -34,7 +44,37 @@ export default {
     const hasAccount = ref(true)
     const nickname = ref(null)
     const avatar = ref(null)
-    return { hasAccount, nickname, avatar }
+    const isBind = ref(true)
+    // 1. 获取QQ互联的openId也就是后台需要的unionId
+    // 2. 根据QQ互联的openId去进行登录，准备一个接口
+    const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
+    const unionId = ref(null)
+    if (QC.Login.check()) {
+      // 检查QQ是否登录
+      QC.Login.getMe((openId) => {
+        unionId.value = openId
+        userQQLogin(openId).then(data => {
+          // 代表：使用qq登录成功
+          // 1. 存储用户信息
+          const { id, account, avatar, mobile, nickname, token } = data.result
+          store.commit('user/setUser', { id, account, avatar, mobile, nickname, token })
+          store.commit('user/setRedirectUrl', route.query.redirectUrl)
+          // 2. 跳转到来源页或者首页
+          store.dispatch('cart/mergeLocalCart').then(() => {
+          // 2. 跳转到来源页或者首页
+            router.push(store.state.user.redirectUrl)
+            // 3. 成功提示
+            Message({ type: 'success', text: 'QQ登录成功' })
+          })
+        }).catch(e => {
+          // 代表：使用qq登录失败===>1. 没绑定小兔鲜帐号  2. 没有小兔鲜帐号
+          isBind.value = false
+        })
+      })
+    }
+    return { hasAccount, nickname, avatar, isBind, unionId }
   }
 }
 </script>
@@ -72,5 +112,23 @@ export default {
 .tab-content {
   min-height: 600px;
   background: #fff;
+}
+.container {
+  padding: 25px 0;
+  position: relative;
+  height: 730px;
+  .unbind {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: 25px 0;
+    z-index: 99;
+    .loading {
+      height: 100%;
+      // background: #fff url(../../assets/images/load.gif) no-repeat center / 100px 100px;
+    }
+  }
 }
 </style>

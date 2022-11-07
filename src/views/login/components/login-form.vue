@@ -160,6 +160,13 @@ export default {
             // 3. 完成手机号短信验证码登录逻辑
             data = await userMobileLogin(form)
           }
+          // 合并购物车操作
+          store.dispatch('cart/mergeLocalCart').then(() => {
+          // 2. 提示
+            Message({ type: 'success', text: '登录成功' })
+            // 3. 跳转
+            router.push(route.query.redirectUrl || '/')
+          })
         } catch (e) {
           Message({ type: 'error', text: e.response.data.message || '登录失败' })
         }

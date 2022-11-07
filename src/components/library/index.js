@@ -5,6 +5,8 @@ import defaultImg from '@/assets/images/200.png'
 // import XtxBread from './xtx-bread.vue'
 // import XtxBreadItem from './xtx-bread-item.vue'
 
+import Confirm from './Confirm.js'
+
 import Message from './Message.js'
 
 const importFn = require.context('./', false, /\.vue$/)
@@ -51,5 +53,6 @@ export default {
     // 定义指令
     defineDirective(app)
     app.config.globalProperties.$message = Message// 原型函数
+    app.config.globalProperties.$confirm = Confirm// 原型函数
   }
 }

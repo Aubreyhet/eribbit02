@@ -13,14 +13,14 @@ module.exports = defineConfig({
       ]
     }
   },
-  chainWebpack: config => {
-    config.devServer.disableHostCheck(true)
-    config.module
-      .rule('images')
-      .use('url-loader')
-      .loader('url-loader')
-      .tap(options => Object.assign(options, { limit: 10000 }))
-  },
+  // chainWebpack: config => {
+  //   config.devServer.disableHostCheck(true)
+  //   config.module
+  //     .rule('images')
+  //     .use('url-loader')
+  //     .loader('url-loader')
+  //     .tap(options => Object.assign(options, { limit: 10000 }))
+  // },
   configureWebpack: {
     externals: {
       qc: 'QC'
