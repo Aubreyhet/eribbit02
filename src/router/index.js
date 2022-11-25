@@ -11,6 +11,9 @@ const PayCheckout = () => import('@/views/member/pay/checkout')
 const PayIndex = () => import('@/views/member/pay/index')
 const LoginCallback = () => import('@/views/login/callback')
 
+const MemberLayout = () => import('@/views/member/Layout')
+const MemberHome = () => import('@/views/member/home')
+
 const routes = [
   {
     path: '/',
@@ -21,6 +24,13 @@ const routes = [
         component: Home
       },
       { path: '/category/:id', component: TopCategory },
+      {
+        path: '/member',
+        component: MemberLayout,
+        children: [
+          { path: '/member', component: MemberHome }
+        ]
+      },
       { path: '/category/sub/:id', component: SubCategory },
       { path: '/product/:id', component: Goods },
       { path: '/cart', component: Cart },
