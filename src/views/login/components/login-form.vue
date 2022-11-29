@@ -88,7 +88,9 @@ export default {
     const isMsgLogin = ref(false)
     // 表单信息对象
     const form = reactive({
-      isAgree: true
+      isAgree: true,
+      account: 'xiaotuxian001',
+      password: '123456'
     })
     // 切换表单元素，还原数据和清除校验效果
     const formCom = ref(null)

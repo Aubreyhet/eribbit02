@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { h } from 'vue'
 import store from '@/store'
 import TopCategory from '@/views/category'
 import SubCategory from '@/views/category/sub.vue'
@@ -14,6 +15,8 @@ const LoginCallback = () => import('@/views/login/callback')
 const MemberLayout = () => import('@/views/member/Layout')
 const MemberHome = () => import('@/views/member/home')
 
+const MemberOrder = () => import('@/views/member/order')
+
 const routes = [
   {
     path: '/',
@@ -28,7 +31,15 @@ const routes = [
         path: '/member',
         component: MemberLayout,
         children: [
-          { path: '/member', component: MemberHome }
+          { path: '/member', component: MemberHome },
+          {
+            path: '/member/order/',
+            component: { render: () => h(<RouterView/>) },
+            children: [
+              { path: '', component: MemberOrder }
+              // { path: ':id', component: MemberOrderDetail }
+            ]
+          }
         ]
       },
       { path: '/category/sub/:id', component: SubCategory },

@@ -54,7 +54,7 @@
             </tr>
           </tbody>
           <!-- 无效商品 -->
-          <tbody>
+          <!-- <tbody>
             <tr><td colspan="6"><h3 class="tit">失效商品</h3></td></tr>
             <tr v-for="i in 3" :key="i">
               <td><XtxCheckbox style="color:#eee;" /></td>
@@ -75,7 +75,7 @@
                 <p><a href="javascript:;">找相似</a></p>
               </td>
             </tr>
-          </tbody>
+          </tbody> -->
         </table>
       </div>
       <!-- 操作栏 -->

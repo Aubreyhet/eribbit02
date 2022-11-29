@@ -33,7 +33,7 @@ export default {
 <style scoped lang="less">
 .home-overview {
   height: 132px;
-  // background: url(../../../../assets/images/center-bg.png) no-repeat center / cover;
+  background: url(../../../../assets/images/center-bg.png) no-repeat center / cover;
   display: flex;
   .user-meta {
     flex: 1;

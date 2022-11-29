@@ -67,3 +67,11 @@ export const userQQBindLogin = ({ unionId, mobile, code }) => {
 export const userCheckAccount = (account) => {
   return request('/register/check', 'get', { account })
 }
+
+export const userQQPatchCode = (mobile) => {
+  return request('/register/code', 'get', { mobile: mobile })
+}
+
+export const userQQPatchLogin = (form) => {
+  return request(`/login/social/${form.unionId}/complement`, 'post', { ...form })
+}
